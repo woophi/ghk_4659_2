@@ -56,7 +56,7 @@ export const App = () => {
   }, []);
 
   const submit = () => {
-    if (!brokerName) {
+    if (!brokerName && selectedOption === 'Другой брокер') {
       setErrorUpload('Введите название брокера');
       return;
     }
@@ -65,7 +65,7 @@ export const App = () => {
 
     sendDataToGA({
       broker: selectedOption,
-      broker_next: brokerName,
+      broker_next: brokerName || 'None',
       type: 'report',
     }).then(() => {
       // LS.setItem(LSKeys.ShowThx, true);
@@ -95,6 +95,7 @@ export const App = () => {
           loading={loading}
           brokerName={brokerName}
           setBrokerName={setBrokerName}
+          selectedOption={selectedOption}
         />
       );
     }
@@ -134,12 +135,14 @@ const Step2 = ({
   onDrop,
   brokerName,
   setBrokerName,
+  selectedOption,
 }: {
   loading: boolean;
   errorUpload: string;
   onDrop: (acceptedFiles: File[]) => void;
   brokerName: string;
   setBrokerName: (name: string) => void;
+  selectedOption: string;
 }) => {
   const { getInputProps, open: openDropzone } = useDropzone({
     noClick: true,
@@ -166,14 +169,16 @@ const Step2 = ({
 
         <Typography.Text view="primary-medium">Загрузите последний отчет от вашего брокера</Typography.Text>
 
-        <Input
-          placeholder="Введите название брокера"
-          label="Название брокера"
-          labelView="outer"
-          value={brokerName}
-          onChange={e => setBrokerName(e.target.value)}
-          block
-        />
+        {selectedOption === 'Другой брокер' && (
+          <Input
+            placeholder="Введите название брокера"
+            label="Название брокера"
+            labelView="outer"
+            value={brokerName}
+            onChange={e => setBrokerName(e.target.value)}
+            block
+          />
+        )}
 
         <Steps isVerticalAlign={true} interactive={false} className={appSt.stepStyle}>
           <Typography.Text view="primary-medium">
