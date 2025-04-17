@@ -68,7 +68,7 @@ export const App = () => {
       broker_next: brokerName || 'None',
       type: 'report',
     }).then(() => {
-      // LS.setItem(LSKeys.ShowThx, true);
+      LS.setItem(LSKeys.ShowThx, true);
       setThx(true);
       setLoading(false);
     });
